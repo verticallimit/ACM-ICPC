@@ -18,14 +18,6 @@ struct Edge{
     Edge(int u, int v, int w):u(u),v(v),w(w) {}
 };
 
-struct node {
-    int d, u;
-    node(int d, int u):d(d),u(u) {}
-    friend bool operator < (node a, node b) {
-        return a.d > b.d;
-    }
-};
-
 vector<Edge> edges;
 vector<int> G[maxn];
 int dist[maxn]; // 存放起点到i点的最短距离
@@ -33,14 +25,13 @@ int vis[maxn]; // 标记是否访问过
 int p[maxn]; // 存放路径
 
 void spfa(int s) {
-    queue<node> q;
+    queue<int> q;
     for (int i = 0; i <= n; i++) dist[i] = INF;
     dist[s] = 0;
     memset(vis, 0, sizeof(vis));
-    q.push(node(0, s));
+    q.push(s);
     while (!q.empty()) {
-        node now = q.front(); q.pop();
-        int u = now.u;
+        int u = q.front(); q.pop();
         vis[u] = 0;
         for (int i = 0; i < G[u].size(); i++) {
             Edge& e = edges[G[u][i]];
@@ -49,7 +40,7 @@ void spfa(int s) {
                 p[e.v] = G[u][i];
                 if (!vis[e.v]) {
                     vis[e.v] = 1;
-                    q.push(node(dist[e.v], e.v));
+                    q.push(e.v);
                 }
             }
         }
