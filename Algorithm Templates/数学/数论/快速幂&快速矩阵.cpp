@@ -1,34 +1,40 @@
-typedef long long LL;
-LL quick_mod(LL a, LL b, int mod) {
-    LL res = 1;
-    while (b > 0) {
-        if (b & 1) res = (res * a) % mod;
-        b = b >> 1;
-        a = (a * a) % mod;
+typedef long long ll;
+ll mod_pow(ll x, ll y, ll mod) {
+    ll res = 1;
+    while (n > 0) {
+        if (n & 1) res = res * x % mod; //如果二进制最低位为1、则乘上x^(2^i)
+        x = x * x % mod;  // 将x平方
+        n >>= 1;
     }
     return res;
 }
 
+const int MOD = 1e9 + 7;
 struct Matrix {
-    int m[3][3];
+    long long mat[2][2];
 };
-Matrix Mul(Matrix a, Matrix b) {
-    Matrix c;
-    memset(c.m, 0, sizeof(c.m));
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            for (int k = 0; k < 3; k++)
-                c.m[i][j] += ((a.m[i][k] * b.m[k][j]) % Mod + Mod) % Mod;
-    return c;
-}
-Matrix fast_mod(Matrix a, int n) {
-    Matrix res;
-    memset(res.m,0,sizeof(res.m));
-    res.m[0][0] = res.m[1][1] = res.m[2][2] = 1;
-    while (n) {
-        if (n & 1) res = Mul(res, a);
-        n >>= 1;
-        a = Mul(a, a);
+Matrix mul(Matrix a, Matrix b) {
+    Matrix ret;
+    for(int i = 0; i < 2; i++) {
+        for(int j = 0; j < 2; j++) {
+            ret.mat[i][j] = 0;
+            for(int k = 0; k < 2; k++) {
+                ret.mat[i][j] += a.mat[i][k] * b.mat[k][j];
+                ret.mat[i][j] %= (MOD - 1);
+            }
+        }
     }
-    return res;
+    return ret;
+}
+Matrix pow_M(Matrix a,int n) {
+    Matrix ret;
+    memset(ret.mat, 0, sizeof(ret.mat));
+    ret.mat[0][0] = ret.mat[1][1] = 1;
+    Matrix temp = a;
+    while (n) {
+        if (n&1) ret = mul(ret, temp);
+        temp = mul(temp, temp);
+        n >>= 1;
+    }
+    return ret;
 }
