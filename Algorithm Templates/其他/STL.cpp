@@ -40,7 +40,7 @@ priority_queue 模板类有三个模板参数，第一个是元素类型，第�
 其中后两个都可以省略，默认容器为vector，默认算子为less，即小的往前排，大的往后排（出队时序列尾的元素出队）。
 priority_queue<int> q1;
 priority_queue< pair<int, int> > q2; // 注意在两个尖括号之间一定要留空格
-priority_queue<int, vector<int>, greater<int> > q3; //定义小的先出队
+rr q3; //定义小的先出队
 struct Node{
     int x, y;
     Node(int a = 0, int b= 0):x(a), y(b) {}
@@ -84,3 +84,7 @@ push_back();
 pop_front();
 pop_back();
 erase();insert();
+
+11.unique
+sort(a,a+n);
+n = unique(a,a+n) - a;//关键的一句

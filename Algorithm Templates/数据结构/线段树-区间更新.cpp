@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 using namespace std;
-#define lson x << 1
+#define lson (x << 1)
 #define rson (x << 1) + 1
 const int MAXN = 100000 + 5;
 int tree[MAXN << 2];   //树是原区间四倍长

@@ -13,8 +13,15 @@ typedef long long LL;
 
 const int maxn = 2 * 100000 + 10;
 
-set<int> s;
-queue<int> q;
+int _min(int a, int b) {
+    if (a < b) return a;
+    else return b;
+}
+
+int _max(int a, int b) {
+    if (a > b) return a;
+    else return b;
+}
 
 
 int main() {

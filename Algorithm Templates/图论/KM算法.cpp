@@ -1,20 +1,24 @@
 /*
-复杂度O(nx*nx*ny)
-求最大权匹配
+KM算法主要用于求解最大(小)权完美匹配问题、在求非2完美匹配时需要添加边从而使其转化为完美匹配、
+KM算法还可以解形似二分图的不等式组、
+KM算法还可以解形似二分图的不等式组、复杂度O（V^3）
+二分图最大权匹配  复杂度O(nx*nx*ny)
 若求最小权匹配，可将权值取相反数，结果取相反数
 点的编号从0开始
 */
-const int N = 300 + 10;
-const int INF = 0x3f3f3f3f;
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 310;
+const int INF =0x3f3f3f3f;
 int nx, ny;//两边的点数
-int g[N][N];//二分图描述
-int linker[N], lx[N], ly[N];//y中各点匹配状态，x,y中的点标号
+int g[N][N];
+int linker[N], lx[N], ly[N];//y中各点匹配状态、x/y中的点标号
 int slack[N];
 bool visx[N], visy[N];
 bool DFS(int x) {
-    vis[x] = true;
+    visx[x] = true;
     for (int y = 0; y < ny; y++) {
-        if (visy[y]) continue;
+        if (visy[y])continue;
         int tmp = lx[x] + ly[y] - g[x][y];
         if (tmp == 0) {
             visy[y] = true;
@@ -23,8 +27,7 @@ bool DFS(int x) {
                 return true;
             }
         }
-        else if (slack[y] > tmp)
-            slack[y] = tmp;
+        else if(slack[y] > tmp) slack[y] = tmp;
     }
     return false;
 }
@@ -33,10 +36,10 @@ int KM() {
     memset(ly, 0, sizeof(ly));
     for (int i = 0; i < nx; i++) {
         lx[i] = -INF;
-        for (int j = 0; j < ny; j++) {
+        for (int j = 0; j < ny; j++)
             if (g[i][j] > lx[i])
                 lx[i] = g[i][j];
-        }
+
     }
     for (int x = 0; x < nx; x++) {
         for (int i = 0; i < ny; i++)
@@ -59,17 +62,17 @@ int KM() {
     }
     int res = 0;
     for (int i = 0; i < ny; i++)
-        if (linker[i] != -1) res += g[linker[i]][i];
+        if (linker[i] != -1)
+            res += g[linker[i]][i];
     return res;
 }
-//HDU 2255
 int main() {
     int n;
-    while (scanf("%d", &n) != EOF) {
-        for (int  i = 0; i < n; i++)
+    while(scanf("%d", &n) != EOF) {
+        for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++)
                 scanf("%d", &g[i][j]);
-        nx = ny = n;
+        nx = ny =n;
         printf("%d\n", KM());
     }
     return 0;

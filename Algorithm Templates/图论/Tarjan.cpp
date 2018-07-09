@@ -1,14 +1,17 @@
+//HDU 1269
+#include <bits/stdc++.h>
+using namespace std;
 /*
 Tarjan算法
 复杂度O(N+M)
 */
-const int maxn = 20000 + 10; // 点数
-const int maxm = 50000 + 10; // 边数
+const int maxn = 10000 + 10; // 点数
+const int maxm = 100000 + 10; // 边数
 struct Edge {
     int to, next;
 }edge[maxm];
 int head[maxn], tot;
-int Low[maxn], DFN[maxn],Stack[MAXN],Belong[maxn];//Belong数组的值是1~scc
+int Low[maxn], DFN[maxn],Stack[maxn],Belong[maxn];//Belong数组的值是1~scc
 int Index, top;
 int scc;//强连通分量的个数
 bool Instack[maxn];
@@ -28,10 +31,10 @@ void Tarjan(int u) {
     for (int i = head[u]; i != -1; i =edge[i].next) {
         v = edge[i].to;
         if (!DFN[v]) {
-            tarjan(v);
+            Tarjan(v);
             if (Low[u] > Low[v]) Low[u] = Low[v];
         }
-        else if (Instack[v] && Low[u] > DFS[v])
+        else if (Instack[v] && Low[u] > DFN[v])
             Low[u] = DFN[v];
     }
     if (Low[u] == DFN[u]) {
@@ -59,4 +62,21 @@ void solve(int N) {
 void init() {
     tot = 0;
     memset(head, -1, sizeof(head));
+}
+
+int main() {
+    int n, m;
+    while(scanf("%d%d", &n, &m) != EOF, n + m) {
+        init();
+        for (int i = 1; i <= m; i++) {
+            int a, b;
+            scanf("%d%d", &a, &b);
+            addedge(a, b);
+        }
+        solve(n);
+        if (scc == 1) printf("Yes\n");
+        else printf("No\n");
+    }
+    system("pause");
+    return 0;
 }
