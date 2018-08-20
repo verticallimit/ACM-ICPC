@@ -1,7 +1,9 @@
+#include <bits/stdc++.h>
+using namespace std;
 /*
 Manacher求最长回文子串
 */
-cont int maxn = 110000 + 10;
+const int maxn = 110000 + 10;
 char Ma[maxn << 1];
 int Mp[maxn << 1];
 void Manacher(char s[], int len) {

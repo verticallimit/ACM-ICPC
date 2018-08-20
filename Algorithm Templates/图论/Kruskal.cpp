@@ -10,11 +10,10 @@ struct node {
     int u;
     int v;
     int w;
-}edge[maxn];
+}edge[maxn * maxn];
 
 int cmp(node A, node B) {
-    if (A.w < B.w) return 1;
-    else return 0;
+    return A.w < B.w;
 }
 int fa[maxn];
 
@@ -25,28 +24,27 @@ int find(int x) {
 }
 
 int main(){
-        int N , M;
-        while(scanf("%d%d",&N ,&M) != EOF){
+    int N , M;
+    while(scanf("%d",&N) != EOF){
         if (N == 0) break;
-        for (int i = 1; i <= M; i++)
-            fa[i] = i;
-                for(int i = 0;i < N;i++) {
+        M = N * (N - 1) / 2;
+        for (int i = 0; i < M; i++) {
             scanf("%d%d%d", &edge[i].u, &edge[i].v, &edge[i].w);
-                }
-                sort(edge, edge + N, cmp);
+        }
+        for (int i = 1; i <= N; i++) fa[i] = i;
+        sort(edge, edge + M, cmp);
         long long int sum = 0;
         int total = 0;
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < M; i++) {
             int fx = find(edge[i].u);
             int fy = find(edge[i].v);
             if (fx != fy) {
                 fa[fx] = fy;
-                sum += edge[i].w;
+                sum += (long long)edge[i].w;
                 total++;
             }
         }
-        if (total == M - 1) printf("%lld\n", sum);
-        else printf("?\n");
-        }
-        return 0;
+        printf("%lld\n", sum);
+    }
+    return 0;
 }

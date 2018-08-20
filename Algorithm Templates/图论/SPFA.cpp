@@ -37,7 +37,7 @@ void spfa(int s) {
             Edge& e = edges[G[u][i]];
             if (dist[e.v] > dist[u] + e.w) {
                 dist[e.v] = dist[u] + e.w;
-                p[e.v] = G[u][i];
+                p[e.v] = u;
                 if (!vis[e.v]) {
                     vis[e.v] = 1;
                     q.push(e.v);

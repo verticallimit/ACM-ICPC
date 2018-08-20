@@ -1,68 +1,78 @@
-#include <string>
-#include <cstdio>
-#include <cstring>
 #include <iostream>
-#include <algorithm>
+#include <stdio.h>
+#define ll long long
+#define lson l, mid, rt << 1
+#define rson mid + 1, r, rt << 1 | 1
 using namespace std;
-#define lson (x << 1)
-#define rson (x << 1) + 1
-const int MAXN = 100000 + 5;
-int tree[MAXN << 2];   //树是原区间四倍长
-int n, m;
-int a[MAXN];
-int lazy[MAXN << 2];
 
-void push_up(int x) {
-    tree[x] = tree[lson] + tree[rson];
+const int MAXN = 1e5 + 10;
+ll sum[MAXN << 2];
+ll add[MAXN << 2];
+
+void push_up(int rt){//向上更新
+    sum[rt] = sum[rt << 1] + sum[rt << 1 | 1];
 }
 
-void push_down(int x, int l, int r) {
-    if (lazy[x] != -1) {
-        lazy[lson] = lazy[x];
-        lazy[rson] = lazy[x];
-        lazy[x] = -1;
-        int mid = (l + r) / 2;
-        tree[lson] = (mid - l + 1)* lazy[lson];
-        tree[rson] = (r - mid)* lazy[rson];
+void push_down(int rt, int m){
+    if(add[rt]){//若有标记,则将标记向下移动一层
+        add[rt << 1] += add[rt];
+        add[rt << 1 | 1] += add[rt];
+        sum[rt << 1] += (m - (m >> 1)) * add[rt];
+        sum[rt << 1 | 1] += (m >> 1) * add[rt];
+        add[rt] = 0;//取消本层标记
     }
 }
-void creat(int x, int l, int r) {
-    if(l == r) {
-      tree[x] = 1;return;
-    }
-    int mid = (l+ r)/ 2;
-    creat(lson, l, mid);
-    creat(rson, mid + 1, r);
-    push_up(x);
-}
 
-void Update(int x, int L, int R, int a, int b, int val) {
-    if (L >= a && R <= b) {
-        tree[x] = val * (R - L + 1 );
-        lazy[x] = val;
+void build(int l, int r, int rt){//建树
+    add[rt] = 0;
+    if(l == r){
+        scanf("%lld", &sum[rt]);
         return;
     }
-    push_down(x, L, R);
-    int mid = (L + R) / 2;
-    if (a <= mid) Update(lson, L, mid, a, b, val);
-    if (b > mid)  Update(rson, mid + 1, R, a, b, val);
-    push_up(x);
+    int mid = (l + r) >> 1;
+    build(lson);
+    build(rson);
+    push_up(rt);//向上更新
 }
 
-int main() {
-    int repeat; cin >> repeat;
-    for (int i = 1; i <= repeat; i++) {
-        memset(lazy, -1, sizeof(lazy));
-        memset(tree, 0, sizeof(tree));
-        scanf("%d", &n);
-        creat(1, 1, n);
-        scanf("%d", &m);
-        while (m --) {
-            int A, B, V;
-            scanf("%d%d%d", &A, &B, &V);
-            Update(1, 1, n, A, B, V);
-        }
-        printf("Case %d: The total value of the hook is %d.\n", i, tree[1]);
+void update(int L, int R, ll key, int l, int r, int rt){//区间更新
+    if(L <= l && R >= r){
+        sum[rt] += (r - l + 1) * key;
+        add[rt] += key;
+        return;
     }
-    return 0;
+    push_down(rt, r - l + 1);//向下更新
+    int mid = (l + r) >> 1;
+    if(L <= mid) update(L, R, key, lson);
+    if(R > mid) update(L, R, key, rson);
+    push_up(rt);//向上更新
+}
+
+ll query(int L, int R, int l, int r, int rt){//区间求和
+    if(L <= l && R >= r) return sum[rt];
+    push_down(rt, r - l + 1);//向下更新
+    int mid = (l + r) >> 1;
+    ll ans = 0;
+    if(L <= mid) ans += query(L, R, lson);
+    if(R > mid) ans += query(L, R, rson);
+    return ans;
+}
+
+int main(void){
+    int n, m;
+    scanf("%d%d", &n, &m);
+    build(1, n, 1);
+    while(m--){
+        char str[3];
+        int x, y;
+        ll z;
+        scanf("%s", str);
+        if(str[0] == 'C'){
+            scanf("%d%d%lld", &x, &y, &z);
+            update(x, y, z, 1, n, 1);
+        }else{
+            scanf("%d%d", &x, &y);
+            printf("%lld\n", query(x, y, 1, n, 1));
+        }
+    }
 }

@@ -1,3 +1,10 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int maxn = 1e6 + 10;
+
+#define next next1
+
 /*
 next[]的含义: x[i-next[i]... i-1] = x[0...next[i]-1]
 next[i]为满足x[i-z...i-1]=x[0...z-1]的最大值(就是x的自身匹配)
@@ -21,7 +28,7 @@ void preKMP(char x[], int m, int kmpNext[]) {
     i = 0;
     while (i < m) {
         while (-1 != j && x[i] != x[j]) j = kmpNext[j];
-        if (x[++i] == x[++j]) kmpNext[i] = kmpNext[j]
+        if (x[++i] == x[++j]) kmpNext[i] = kmpNext[j];
         else kmpNext[i] = j;
     }
 }
@@ -45,4 +52,19 @@ int KMP_Count(char x[], int m, char y[], int n) {
         }
     }
     return ans;
+}
+
+int main() {
+    int T;
+    cin >> T;
+    while (T--) {
+        char s1[10005], s2[maxn];
+        scanf("%s%s", s1, s2);
+        int len1 = strlen(s1);
+        int len2 = strlen(s2);
+        preKMP(s1, len1, next);
+        int ans = KMP_Count(s1, len1, s2, len2);
+        printf("%d\n", ans);
+    }
+    return 0;
 }

@@ -76,7 +76,22 @@ int main() {
         solve(n);
         if (scc == 1) printf("Yes\n");
         else printf("No\n");
+        /*
+        缩点
+        for (int i = 1; i <= n; i++) val[i] = INF;
+        for (int i = 1; i <= n; i++) {
+            val[Belong[i]] = min(val[Belong[i]], w[i]);
+        }
+        for (int i = 1; i <= n; i++) {
+            int now = i;
+            for (int j = head[now]; j != -1; j = edge[j].next) {
+                int s = edge[j].to;
+                if (Belong[now] != Belong[s]) {
+                    addedge1(Belong[now], Belong[s]);
+                }
+            }
+        }
+        */
     }
-    system("pause");
     return 0;
 }

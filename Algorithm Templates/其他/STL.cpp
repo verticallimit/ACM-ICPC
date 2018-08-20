@@ -74,7 +74,8 @@ a.push_back(1);
 使用pop_back()可以删掉尾部第一个元素，pop_front()可以删掉头部第一个元素。
 swap(a,b);//交换两个链表
 reverse(b.begin(),b.end());//逆置
-a.merge(b) 调用结束后b变为空，a中元素包含原来a和b的元素。
+a.splice(a.begin(), b);//把b合并到a上
+a.merge(b)//merge合并是会自动排序的、调用结束后b变为空，a中元素包含原来a和b的元素。
 a.insert(a.begin(),100);  //在a的开始位置（即头部）插入100
 a.erase(a.begin());  //将a的第一个元素删除
 a.remove(7);//删除a中值为7的元素
