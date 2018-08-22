@@ -37,6 +37,7 @@ while (!q.empty()) {
 6.优先队列
 priority_queue<int> q;
 priority_queue 模板类有三个模板参数，第一个是元素类型，第二个容器类型，第三个是比较算子。
+priority_queue<int, vector<int>, greater<int> > q;
 其中后两个都可以省略，默认容器为vector，默认算子为less，即小的往前排，大的往后排（出队时序列尾的元素出队）。
 priority_queue<int> q1;
 priority_queue< pair<int, int> > q2; // 注意在两个尖括号之间一定要留空格
